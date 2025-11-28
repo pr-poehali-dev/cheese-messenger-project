@@ -11,11 +11,11 @@ const Index = () => {
     avatar?: string;
   } | null>(null);
 
-  const handleAuthSuccess = (phone: string) => {
+  const handleAuthSuccess = (email: string) => {
     setCurrentUser({
       id: '1',
       name: 'Пользователь',
-      phone: phone,
+      phone: email,
       avatar: '🧀',
     });
     setIsAuthenticated(true);

@@ -5,17 +5,17 @@ import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 interface AuthScreenProps {
-  onAuthSuccess: (phone: string) => void;
+  onAuthSuccess: (email: string) => void;
 }
 
 export default function AuthScreen({ onAuthSuccess }: AuthScreenProps) {
-  const [step, setStep] = useState<'phone' | 'code'>('phone');
-  const [phone, setPhone] = useState('');
+  const [step, setStep] = useState<'email' | 'code'>('email');
+  const [email, setEmail] = useState('');
   const [code, setCode] = useState('');
 
-  const handlePhoneSubmit = (e: React.FormEvent) => {
+  const handleEmailSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (phone.length >= 10) {
+    if (email.includes('@') && email.includes('.')) {
       setStep('code');
     }
   };
@@ -24,7 +24,7 @@ export default function AuthScreen({ onAuthSuccess }: AuthScreenProps) {
     setCode(value);
     if (value.length === 6) {
       setTimeout(() => {
-        onAuthSuccess(phone);
+        onAuthSuccess(email);
       }, 500);
     }
   };
@@ -38,20 +38,20 @@ export default function AuthScreen({ onAuthSuccess }: AuthScreenProps) {
             CheeseHome
           </CardTitle>
           <CardDescription className="text-base">
-            {step === 'phone' 
-              ? 'Введите номер телефона для входа' 
-              : 'Введите код из SMS'}
+            {step === 'email' 
+              ? 'Введите электронную почту для входа' 
+              : 'Введите код из письма'}
           </CardDescription>
         </CardHeader>
         <CardContent>
-          {step === 'phone' ? (
-            <form onSubmit={handlePhoneSubmit} className="space-y-4">
+          {step === 'email' ? (
+            <form onSubmit={handleEmailSubmit} className="space-y-4">
               <div className="space-y-2">
                 <Input
-                  type="tel"
-                  placeholder="+7 (999) 123-45-67"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
+                  type="email"
+                  placeholder="your@email.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   className="text-lg h-12 border-2"
                   autoFocus
                 />
@@ -59,7 +59,7 @@ export default function AuthScreen({ onAuthSuccess }: AuthScreenProps) {
               <Button 
                 type="submit" 
                 className="w-full h-12 text-lg font-semibold hover-scale"
-                disabled={phone.length < 10}
+                disabled={!email.includes('@') || !email.includes('.')}
               >
                 Получить код
               </Button>
@@ -86,9 +86,9 @@ export default function AuthScreen({ onAuthSuccess }: AuthScreenProps) {
               <Button
                 variant="ghost"
                 className="w-full"
-                onClick={() => setStep('phone')}
+                onClick={() => setStep('email')}
               >
-                Изменить номер
+                Изменить почту
               </Button>
             </div>
           )}
